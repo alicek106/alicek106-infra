@@ -61,5 +61,12 @@ locals {
 
 provider "aws" {
   version = "~> 3.0"
-  region  = "ap-northeast-2" # temp
+  region  = "ap-northeast-2"
+  alias   = "ap-northeast-2"
+}
+
+provider "aws" {
+  version = "~> 3.0"
+  region  = "ap-northeast-1"
+  alias   = "ap-northeast-1"
 }

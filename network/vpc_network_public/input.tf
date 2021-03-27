@@ -17,3 +17,6 @@ variable "subnet_cidr_blocks" {
 variable "common_tags" {
   type = map(any)
 }
+
+provider "aws" {
+}

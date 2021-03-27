@@ -7,4 +7,8 @@ module "vpc_network_public" {
   vpc_cidr_block     = local.vpc_cidr_blocks[each.key]
   subnet_cidr_blocks = local.subnet_cidr_blocks_public[each.key]
   common_tags        = local.common_tags
+
+  providers = {
+    aws = aws.ap-northeast-2
+  }
 }
