@@ -10,9 +10,9 @@ resource "aws_vpc" "main" {
     "Name" = var.name
   }, var.common_tags)
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 
 resource "aws_internet_gateway" "main" {

@@ -1,4 +1,4 @@
-module "vpc_network_public" {
+module "vpc_network_public_apne2" {
   source   = "./vpc_network_public"
   for_each = { for vpc_name in local.public_vpc_list : vpc_name => vpc_name }
 
