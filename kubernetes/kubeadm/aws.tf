@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.region
+  region = data.terraform_remote_state.network.outputs.region
 }
 
 terraform {
@@ -7,5 +7,11 @@ terraform {
     bucket = "alicek106-terraform-state"
     key    = "kubernetes/kubeadm.tfstate"
     region = "ap-northeast-2"
+  }
+
+  required_providers {
+    aws = {
+      version = "~> 3.0"
+    }
   }
 }
