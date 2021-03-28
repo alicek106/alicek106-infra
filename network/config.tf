@@ -7,6 +7,16 @@ terraform {
     region  = "ap-northeast-2"
     encrypt = "true"
   }
+
+  required_providers {
+    aws = {
+      version = "~> 3.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = local.current_region
 }
 
 locals {
@@ -74,9 +84,4 @@ locals {
   current_region             = local.regions[terraform.workspace]
   current_vpc_cidr_block     = local.vpc_cidr_blocks[terraform.workspace]
   current_subnet_cidr_blocks = local.subnet_cidr_blocks[terraform.workspace]
-}
-
-provider "aws" {
-  version = "~> 3.0"
-  region  = local.current_region
 }
