@@ -1,14 +1,9 @@
-module "vpc_network_public_apne2" {
-  source   = "./vpc_network_public"
-  for_each = { for vpc_name in local.public_vpc_list : vpc_name => vpc_name }
+module "vpc_network" {
+  source = "./vpc_network"
 
-  name               = each.key
-  region             = local.regions[each.key]
-  vpc_cidr_block     = local.vpc_cidr_blocks[each.key]
-  subnet_cidr_blocks = local.subnet_cidr_blocks_public[each.key]
-  common_tags        = local.common_tags
-
-  providers = {
-    aws = aws.ap-northeast-2
-  }
+  name                       = terraform.workspace
+  vpc_cidr_block             = local.current_vpc_cidr_block
+  subnet_cidr_blocks_public  = local.current_subnet_cidr_blocks.public
+  subnet_cidr_blocks_private = local.current_subnet_cidr_blocks.private
+  common_tags                = local.common_tags
 }

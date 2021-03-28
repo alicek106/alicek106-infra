@@ -10,6 +10,12 @@ terraform {
 }
 
 locals {
+  vpc_list = [
+    "kubernetes",
+    "general",
+    "vpn"
+  ]
+
   regions = {
     kubernetes = "ap-northeast-2"
     general    = "ap-northeast-2"
@@ -23,50 +29,54 @@ locals {
     vpn        = "172.32.0.0/16"
   }
 
-  public_vpc_list = [
-    "kubernetes",
-    "general",
-    "vpn"
-  ]
-
-  subnet_cidr_blocks_public = {
-    kubernetes = [
-      # each category : /16 cidr
-      # 8192 IP available for each subnet
-      "a:172.16.0.0/19",
-      "b:172.16.32.0/19",
-      "c:172.16.64.0/19",
-      "d:172.16.96.0/19"
-    ]
-    general = [
-      "a:172.24.0.0/19",
-      "b:172.24.32.0/19",
-      "c:172.24.64.0/19",
-      "d:172.24.96.0/19"
-    ]
-    vpn = [
-      "a:172.32.0.0/19",
-      "b:172.32.32.0/19",
-      "c:172.32.64.0/19",
-      "d:172.32.96.0/19"
-    ]
+  subnet_cidr_blocks = {
+    kubernetes = {
+      public = [
+        # each category : /16 cidr
+        # 8192 IP available for each subnet
+        "a:172.16.0.0/19",
+        "b:172.16.32.0/19",
+        "c:172.16.64.0/19",
+        "d:172.16.96.0/19"
+      ]
+      private = [
+        "a:172.16.128.0/19",
+        "b:172.16.160.0/19",
+        "c:172.16.192.0/19",
+        "d:172.16.224.0/19"
+      ]
+    }
+    general = {
+      public = [
+        "a:172.24.0.0/19",
+        "b:172.24.32.0/19",
+        "c:172.24.64.0/19",
+        "d:172.24.96.0/19"
+      ]
+      private = []
+    }
+    vpn = {
+      public = [
+        "a:172.32.0.0/19",
+        "b:172.32.32.0/19",
+        "c:172.32.64.0/19",
+        "d:172.32.96.0/19"
+      ]
+      private = []
+    }
   }
-
-  subnet_cidr_blocks_private = {}
 
   common_tags = {
-    "Owner" = "alicek106"
+    "Owner"     = "alicek106"
+    "ManagedBy" = "Terraform"
   }
+
+  current_region             = local.regions[terraform.workspace]
+  current_vpc_cidr_block     = local.vpc_cidr_blocks[terraform.workspace]
+  current_subnet_cidr_blocks = local.subnet_cidr_blocks[terraform.workspace]
 }
 
 provider "aws" {
   version = "~> 3.0"
-  region  = "ap-northeast-2"
-  alias   = "ap-northeast-2"
-}
-
-provider "aws" {
-  version = "~> 3.0"
-  region  = "ap-northeast-1"
-  alias   = "ap-northeast-1"
+  region  = local.current_region
 }
