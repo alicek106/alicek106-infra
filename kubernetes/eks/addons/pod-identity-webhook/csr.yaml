@@ -1,16 +1,11 @@
-apiVersion: certificates.k8s.io/v1beta1
+apiVersion: certificates.k8s.io/v1
 kind: CertificateSigningRequest
 metadata:
   name: pod-identity-webhook
 spec:
-  groups:
-  - system:serviceaccounts
-  - system:serviceaccounts:default
-  - system:authenticated
-  request: <csr>
-  signerName: kubernetes.io/legacy-unknown # it is removed in certificates.k8s.io/v1. should be replaced to another signer
+  request: <PLACEHOLDER>
+  signerName: kubernetes.io/kubelet-serving
   usages:
   - digital signature
   - key encipherment
   - server auth
-  username: system:serviceaccount:default:pod-identity-webhook

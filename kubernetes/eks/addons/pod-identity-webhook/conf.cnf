@@ -5,8 +5,8 @@ req_extensions = v3_req
 prompt = no
 
 [ req_distinguished_name ]
-organizationName = alicek106
-commonName = pod-identity-webhook.default.svc
+organizationName = system:nodes
+commonName = system:node:pod-identity-webhook.default.svc
 
 [ v3_req ]
 subjectAltName = @alt_names
