@@ -1,0 +1,11 @@
+{
+  "data_dir": "/etc/consul/data",
+  "log_level": "INFO",
+  "server": true,
+  "retry_join": ["provider=aws tag_key=Name tag_value=consul_${consul_version}"],
+  "bootstrap_expect": 3,
+  "ui": true,
+  "log_file": "/etc/consul/consul.log",
+  "client_addr": "0.0.0.0",
+  "enable_syslog": true
+}

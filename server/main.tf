@@ -11,7 +11,8 @@ module "minecraft" {
 
 module "vault" {
   source         = "./vault"
-  vault_version  = "1.6.0"
+  vault_version  = "1.6.4"
+  consul_version = "1.6.3"
   instance_type  = "t3.medium"
   instance_count = 2
 

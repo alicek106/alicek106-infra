@@ -8,6 +8,8 @@ resource "aws_instance" "consul" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.consul.id
 
+  user_data = local.consul_userdata_template
+
   vpc_security_group_ids = [
     aws_security_group.consul.id
   ]
@@ -19,7 +21,7 @@ resource "aws_instance" "consul" {
   }
 
   tags = {
-    Name = "consul"
+    Name = "consul_${var.consul_version}"
   }
 }
 

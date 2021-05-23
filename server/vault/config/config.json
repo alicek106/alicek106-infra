@@ -1,0 +1,9 @@
+{
+  "data_dir": "/etc/consul/data",
+  "log_level": "INFO",
+  "retry_join": ["provider=aws tag_key=Name tag_value=consul_${consul_version}"],
+  "log_file": "/etc/consul/consul.log",
+  "client_addr": "127.0.0.1",
+  "enable_syslog": true,
+  "bind_addr": "NODE_PRIVATE_IP"
+}

@@ -8,6 +8,11 @@ variable "vault_version" {
   default = "1.6.0"
 }
 
+variable "consul_version" {
+  type    = string
+  default = "1.6.0"
+}
+
 variable "instance_count" {
   type    = number
   default = 2
@@ -33,4 +38,9 @@ variable "vpc_id" {
 
 variable "ami_id" {
   type = string
+}
+
+variable "region" {
+  type    = string
+  default = "ap-northeast-2"
 }

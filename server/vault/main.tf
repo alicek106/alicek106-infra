@@ -8,6 +8,8 @@ resource "aws_instance" "vault" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.vault.id
 
+  user_data = local.vault_userdata_template
+
   vpc_security_group_ids = [
     aws_security_group.vault.id
   ]
@@ -19,7 +21,7 @@ resource "aws_instance" "vault" {
   }
 
   tags = {
-    Name = "vault"
+    Name = "vault_${var.vault_version}"
   }
 }
 
