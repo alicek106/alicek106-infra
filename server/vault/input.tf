@@ -3,13 +3,19 @@ variable "instance_type" {
   default = "t3.medium"
 }
 
-variable "plugin" {
+variable "vault_version" {
   type    = string
-  default = ""
+  default = "1.6.0"
+}
+
+variable "instance_count" {
+  type    = number
+  default = 2
 }
 
 variable "key_name" {
-  type = string
+  type    = string
+  default = "fort-da"
 }
 
 variable "availability_zone" {
@@ -18,9 +24,13 @@ variable "availability_zone" {
 }
 
 variable "subnet_id" {
-  type = string
+  type = list(any)
 }
 
 variable "vpc_id" {
+  type = string
+}
+
+variable "ami_id" {
   type = string
 }
