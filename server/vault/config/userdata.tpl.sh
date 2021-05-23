@@ -49,7 +49,7 @@ systemctl enable consul
 systemctl start consul
 
 # 7. Misc
-echo "VAULT_ADDR=http://127.0.0.1:8200" >> /etc/environment
+echo "VAULT_ADDR=http://vault.alicek106.com:8200" >> /etc/environment
 
 ## After that, you should execute below commands.
 # vault operator init
