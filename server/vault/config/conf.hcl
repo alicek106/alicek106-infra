@@ -1,6 +1,6 @@
 listener "tcp" {
   address          = "NODE_PRIVATE_IP:8200"
-  cluster_address  = "127.0.0.1:8201"
+  cluster_address  = "NODE_PRIVATE_IP:8201"
   tls_disable      = "true"
 }
 
