@@ -52,6 +52,7 @@ data "template_file" "master_userdata" {
   vars = {
     kubernetes_version     = var.kubernetes_version
     kubernetes_cni_version = var.kubernetes_cni_version
+    docker_version         = var.docker_version
     master_config          = data.template_file.master_config.rendered
   }
 }
@@ -99,6 +100,7 @@ data "template_file" "worker_userdata" {
   vars = {
     kubernetes_version     = var.kubernetes_version
     kubernetes_cni_version = var.kubernetes_cni_version
+    docker_version         = var.docker_version
     worker_config          = data.template_file.worker_config.rendered
     apiserver_ip           = aws_instance.master.private_ip
   }

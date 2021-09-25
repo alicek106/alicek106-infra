@@ -2,6 +2,7 @@
 
 KUBERNETES_VERSION="${kubernetes_version}"
 KUBERNETES_CNI_VERSION="${kubernetes_cni_version}"
+DOCKER_VERSION=${docker_version}
 HOSTNAME=$(curl http://169.254.169.254/latest/meta-data/local-hostname)
 
 cat > /tmp/worker.yaml << '__EOF_KUBEADM_SPEC'
@@ -18,6 +19,11 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >/etc/apt/sources.l
 
 wget -qO- get.docker.com | sh
 
+if [ "$DOCKER_VERSION" != "latest" ]
+then
+  apt-get install -y --allow-downgrades docker-ce=$DOCKER_VERSION
+  service docker restart
+fi
 
 if [ "$KUBERNETES_VERSION" = "latest" ]
 then

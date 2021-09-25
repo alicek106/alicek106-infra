@@ -30,11 +30,15 @@ variable "cluster_id_value" {
 }
 
 variable "kubernetes_version" {
-  default = "latest"
+  default = "1.20.8-00"
 }
 
 variable "kubernetes_cni_version" {
-  default = "latest"
+  default = "0.8.7-00"
+}
+
+variable "docker_version" {
+  default = "5:19.03.15~3-0~ubuntu-bionic"
 }
 
 variable "initialize_kubeadm" {
@@ -57,7 +61,7 @@ variable "master_instance_type" {
   default = "t2.medium"
 }
 variable "worker_instance_type" {
-  default = "t2.medium"
+  default = "t3.medium"
 }
 
 variable "instance_ami" {

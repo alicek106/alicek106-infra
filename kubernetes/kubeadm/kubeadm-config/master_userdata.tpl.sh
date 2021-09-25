@@ -2,6 +2,7 @@
 
 KUBERNETES_VERSION="${kubernetes_version}"
 KUBERNETES_CNI_VERSION="${kubernetes_cni_version}"
+DOCKER_VERSION=${docker_version}
 
 cat > /tmp/master.yaml << '__EOF_KUBEADM_SPEC'
 ${master_config}
@@ -14,6 +15,12 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" >/etc/apt/sources.list.d/kubernetes.list
 
 wget -qO- get.docker.com | sh
+
+if [ "$DOCKER_VERSION" != "latest" ]
+then
+  apt-get install -y --allow-downgrades docker-ce=$DOCKER_VERSION
+  service docker restart
+fi
 
 
 if [ "$KUBERNETES_VERSION" = "latest" ]
