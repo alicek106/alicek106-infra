@@ -1,50 +1,11 @@
-resource "aws_instance" "vault" {
-  count                       = var.instance_count
-  ami                         = var.ami_id
-  instance_type               = var.instance_type
-  key_name                    = var.key_name
-  subnet_id                   = var.subnet_id[count.index] # 4개 이하이기 때문에 이렇게 써도 됨
-  monitoring                  = true
-  associate_public_ip_address = true
-  iam_instance_profile        = aws_iam_instance_profile.vault.id
+module "vault" {
+  source         = "./module"
+  vault_version  = "1.6.4"
+  consul_version = "1.6.3"
+  instance_type  = "t3.medium"
+  instance_count = 2
 
-  user_data = local.vault_userdata_template
-
-  vpc_security_group_ids = [
-    aws_security_group.vault.id
-  ]
-
-  root_block_device {
-    delete_on_termination = false
-    volume_size           = "10"
-    volume_type           = "gp3"
-  }
-
-  tags = {
-    Name = "vault_${var.vault_version}"
-  }
-}
-
-
-resource "aws_security_group" "vault" {
-  vpc_id = var.vpc_id
-  name   = "vault"
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    "Name" = "vault"
-  }
+  subnet_id = data.terraform_remote_state.network.outputs.public_subnet_ids
+  vpc_id    = data.terraform_remote_state.network.outputs.vpc_id
+  ami_id    = data.aws_ami.ubuntu.id
 }

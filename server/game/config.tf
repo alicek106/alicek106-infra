@@ -3,7 +3,7 @@ terraform {
 
   backend "s3" {
     bucket  = "alicek106-terraform-state"
-    key     = "network-infra.tfstate"
+    key     = "games.tfstate"
     region  = "ap-northeast-2"
     encrypt = "true"
   }
