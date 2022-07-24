@@ -29,7 +29,7 @@ resource "aws_instance" "minecraft" {
   key_name                    = var.key_name
   subnet_id                   = var.subnet_id
   monitoring                  = true
-  associate_public_ip_address = true
+  associate_public_ip_address = false
 
   vpc_security_group_ids = [
     aws_security_group.minecraft.id
@@ -71,18 +71,32 @@ resource "aws_security_group" "minecraft" {
   }
 }
 
-resource "aws_volume_attachment" "ebs_attachment" {
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.minecraft.id
-  instance_id = aws_instance.minecraft.id
+# resource "aws_volume_attachment" "ebs_attachment" {
+#   device_name = "/dev/sdh"
+#   volume_id   = aws_ebs_volume.minecraft.id
+#   instance_id = aws_instance.minecraft.id
+# }
+# 
+# resource "aws_ebs_volume" "minecraft" {
+#   availability_zone = var.availability_zone
+#   size              = 20
+#   type              = "gp3"
+# 
+#   tags = {
+#     "Name" = "minecraft"
+#   }
+# }
+#
+#
+data "aws_route53_zone" "zone" {
+  name = "alicek106.com"
 }
 
-resource "aws_ebs_volume" "minecraft" {
-  availability_zone = var.availability_zone
-  size              = 20
-  type              = "gp3"
 
-  tags = {
-    "Name" = "minecraft"
-  }
+resource "aws_route53_record" "minecraft" {
+  zone_id = data.aws_route53_zone.zone.zone_id
+  name    = "minecraft.alicek106.com"
+  type    = "A"
+  ttl     = "300"
+  records = [aws_instance.minecraft.private_ip]
 }
