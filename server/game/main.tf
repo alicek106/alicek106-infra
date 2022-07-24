@@ -5,6 +5,6 @@ module "minecraft" {
   key_name      = "fort-da"
 
   availability_zone = local.availability_zone
-  subnet_id         = data.terraform_remote_state.network.outputs.private_subnet[local.availability_zone].id
+  subnet_id         = data.terraform_remote_state.network.outputs.public_subnet[local.availability_zone].id
   vpc_id            = data.terraform_remote_state.network.outputs.vpc_id
 }
