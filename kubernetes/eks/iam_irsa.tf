@@ -1,16 +1,4 @@
-# openid connect provider
-resource "aws_iam_openid_connect_provider" "eks" {
-  url = module.eks.cluster_oidc_issuer_url
-
-  client_id_list = [
-    "sts.amazonaws.com"
-  ]
-
-  # https://github.com/hashicorp/terraform-provider-aws/issues/10104#issuecomment-534466094
-  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da2b0ab7280"]
-}
-
-# Cluster Autoscaler role
+## Cluster Autoscaler role
 data "aws_iam_policy_document" "cluster_autoscaler_policy" {
   statement {
     effect = "Allow"
@@ -38,11 +26,11 @@ data "aws_iam_policy_document" "cluster_autoscaler_role" {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
       type        = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      identifiers = [module.eks.oidc_provider_arn]
     }
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+      variable = "${module.eks.oidc_provider}:sub"
       values   = ["system:serviceaccount:cluster-autoscaler:cluster-autoscaler"]
     }
   }
