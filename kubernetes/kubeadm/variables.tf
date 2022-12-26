@@ -30,19 +30,11 @@ variable "cluster_id_value" {
 }
 
 variable "kubernetes_version" {
-  default = "1.20.8-00"
-}
-
-variable "kubernetes_cni_version" {
-  default = "0.8.7-00"
-}
-
-variable "docker_version" {
-  default = "5:19.03.15~3-0~ubuntu-bionic"
+  default = "1.26.0-00"
 }
 
 variable "initialize_kubeadm" {
-  default = false
+  default = true
 }
 
 

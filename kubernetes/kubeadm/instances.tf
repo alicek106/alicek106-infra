@@ -13,16 +13,12 @@ resource "random_string" "token_secret" {
 locals {
   token = "${random_string.token_id.result}.${random_string.token_secret.result}"
   master_template = templatefile("kubeadm-config/master_userdata.tpl.sh", {
-    kubernetes_version     = var.kubernetes_version
-    kubernetes_cni_version = var.kubernetes_cni_version
-    docker_version         = var.docker_version
-    master_config          = templatefile("kubeadm-config/master.tpl.yaml", { token = local.token })
+    kubernetes_version = var.kubernetes_version
+    master_config      = templatefile("kubeadm-config/master.tpl.yaml", { token = local.token })
   })
   worker_template = templatefile("kubeadm-config/worker_userdata.tpl.sh", {
-    kubernetes_version     = var.kubernetes_version
-    kubernetes_cni_version = var.kubernetes_cni_version
-    docker_version         = var.docker_version
-    apiserver_ip           = aws_instance.master.private_ip
+    kubernetes_version = var.kubernetes_version
+    apiserver_ip       = aws_instance.master.private_ip
     worker_config = templatefile("kubeadm-config/worker.tpl.yaml", {
       token        = local.token
       apiserver_ip = aws_instance.master.private_ip

@@ -1,11 +1,16 @@
-apiVersion: kubeadm.k8s.io/v1beta1
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: JoinConfiguration
+caCertPath: /etc/kubernetes/pki/ca.crt
 discovery:
   bootstrapToken:
-    token: "${token}"
     apiServerEndpoint: "${apiserver_ip}:6443"
+    token: "${token}"
     unsafeSkipCAVerification: true
+  timeout: 5m0s
+  tlsBootstrapToken: "${token}"
 nodeRegistration:
-  name: NODE_HOSTNAME
+  criSocket: unix:///var/run/containerd/containerd.sock
+  imagePullPolicy: IfNotPresent
   kubeletExtraArgs:
     cloud-provider: aws
+  name: NODE_HOSTNAME

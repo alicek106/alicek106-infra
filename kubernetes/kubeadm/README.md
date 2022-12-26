@@ -10,10 +10,11 @@
 ## How to use
 vpc_network 모듈을 먼저 apply한 뒤, kubernetes 워크스페이스의 네트워크 인프라를 output으로 가져다 쓴다. 주의할 점은 아래와 같다.
 - var.initialize_kubeadm을 true로 설정하면 자동으로 kubeadm 클러스터 설치가 된다.
-- 네트워크 애드온은 수동으로 설치해야 한다. pod cidr은 192.168.0.0/16이므로 아래의 calico.yaml은 그대로 써도 됨.
+- 네트워크 애드온은 수동으로 설치해야 한다.
 ```
-wget \
-https://docs.projectcalico.org/v3.8/manifests/calico.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.5/manifests/tigera-operator.yaml
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.24.5/manifests/custom-resources.yaml -O
+kubectl apply -f custom-resources.yaml
 ```
 - [ec2-connect](https://github.com/alicek106/go-ec2-ssh-autoconnect) group start kubeadm으로 클러스터를 띄우고, ec2-connect group stop kubeadm으로 클러스터를 내린다.
 - [alicek106-dotfile](https://github.com/alicek106/alicek106-dotfile)의 akemi.sh를 사용해 쿠버 context의 API 엔드포인트를 설정한다.
