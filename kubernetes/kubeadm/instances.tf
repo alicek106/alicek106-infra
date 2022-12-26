@@ -11,9 +11,23 @@ resource "random_string" "token_secret" {
 }
 
 locals {
-  token           = "${random_string.token_id.result}.${random_string.token_secret.result}"
-  master_template = data.template_file.master_userdata.rendered
-  worker_template = data.template_file.worker_userdata.rendered
+  token = "${random_string.token_id.result}.${random_string.token_secret.result}"
+  master_template = templatefile("kubeadm-config/master_userdata.tpl.sh", {
+    kubernetes_version     = var.kubernetes_version
+    kubernetes_cni_version = var.kubernetes_cni_version
+    docker_version         = var.docker_version
+    master_config          = templatefile("kubeadm-config/master.tpl.yaml", { token = local.token })
+  })
+  worker_template = templatefile("kubeadm-config/worker_userdata.tpl.sh", {
+    kubernetes_version     = var.kubernetes_version
+    kubernetes_cni_version = var.kubernetes_cni_version
+    docker_version         = var.docker_version
+    apiserver_ip           = aws_instance.master.private_ip
+    worker_config = templatefile("kubeadm-config/worker.tpl.yaml", {
+      token        = local.token
+      apiserver_ip = aws_instance.master.private_ip
+    })
+  })
 }
 
 
@@ -38,31 +52,12 @@ resource "aws_instance" "master" {
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "kubeadm_master",
-    )
+    tomap({
+      "Name" = "kubeadm_master",
+    })
   )
 
   user_data = var.initialize_kubeadm ? local.master_template : ""
-}
-
-data "template_file" "master_userdata" {
-  template = file("kubeadm-config/master_userdata.tpl.sh")
-
-  vars = {
-    kubernetes_version     = var.kubernetes_version
-    kubernetes_cni_version = var.kubernetes_cni_version
-    docker_version         = var.docker_version
-    master_config          = data.template_file.master_config.rendered
-  }
-}
-
-data "template_file" "master_config" {
-  template = file("kubeadm-config/master.tpl.yaml")
-
-  vars = {
-    token = local.token
-  }
 }
 
 # Worker node setting
@@ -86,31 +81,10 @@ resource "aws_instance" "worker" {
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "kubeadm_worker${count.index}",
-    )
+    tomap({
+      "Name" = "kubeadm_worker${count.index}",
+    })
   )
 
   user_data = var.initialize_kubeadm ? local.worker_template : ""
-}
-
-data "template_file" "worker_userdata" {
-  template = file("kubeadm-config/worker_userdata.tpl.sh")
-
-  vars = {
-    kubernetes_version     = var.kubernetes_version
-    kubernetes_cni_version = var.kubernetes_cni_version
-    docker_version         = var.docker_version
-    worker_config          = data.template_file.worker_config.rendered
-    apiserver_ip           = aws_instance.master.private_ip
-  }
-}
-
-data "template_file" "worker_config" {
-  template = file("kubeadm-config/worker.tpl.yaml")
-
-  vars = {
-    token        = local.token
-    apiserver_ip = aws_instance.master.private_ip
-  }
 }

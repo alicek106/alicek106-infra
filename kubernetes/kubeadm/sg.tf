@@ -18,8 +18,8 @@ resource "aws_security_group" "kubeadm" {
 
   tags = merge(
     local.common_tags,
-    map(
-      "Name", "kubeadm",
-    )
+    tomap({
+      "Name" = "kubeadm",
+    })
   )
 }

@@ -42,7 +42,7 @@ variable "docker_version" {
 }
 
 variable "initialize_kubeadm" {
-  default = true
+  default = false
 }
 
 
@@ -58,13 +58,13 @@ variable "zone" {
 
 ## Instance settings
 variable "master_instance_type" {
-  default = "t2.medium"
+  default = "t3.medium"
 }
 variable "worker_instance_type" {
   default = "t3.medium"
 }
 
 variable "instance_ami" {
-  default = "ami-0d777f54156eae7d9" # ubuntu 18.04 bionic
+  default = "ami-0ab04b3ccbadfae1f" # ubuntu 22
 }
 
