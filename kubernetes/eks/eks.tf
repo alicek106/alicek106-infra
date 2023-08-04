@@ -24,10 +24,7 @@ locals {
     # public_ip                     = true # temporary setting
   }
 
-  common_tags = {
-    "k8s.io/cluster-autoscaler/enabled" = "true",
-    "Owner"                             = "alicek106",
-  }
+  common_tags = var.tags
 
   kubelet_instance_id_label = "aws/instance-id=$(curl --silent http://169.254.169.254/latest/meta-data/instance-id)"
 }
@@ -37,6 +34,7 @@ module "eks" {
   cluster_name              = local.cluster_name
   cluster_version           = "1.23"
   version                   = "= 18.26.0"
+  create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
   cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 

@@ -1,6 +1,6 @@
 locals {
   current_region = "ap-northeast-2"
-  cluster_name   = "fort-da"
+  cluster_name   = var.cluster_name
   ssh_key_name   = "fort-da"
 
   # Insert before original userdata
