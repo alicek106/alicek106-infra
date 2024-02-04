@@ -1,0 +1,21 @@
+image:
+  tag: ${image_tag}
+
+rbac:
+  create: true
+  serviceAccount:
+    create: true
+    name: ${service_account_name}
+    annotations:
+      eks.amazonaws.com/role-arn: ${service_account_role_arn}
+
+cloudProvider: aws
+awsRegion: ${region}
+
+autoDiscovery:
+  clusterName: ${cluster_name}
+
+extraArgs:
+  skip-nodes-with-local-storage: ${skip_local_storage}
+  scale-down-delay-after-add: ${scale_down_delay_after_add}
+  scale-down-unneeded-time: ${scale_down_unneeded_time}

@@ -17,7 +17,8 @@ data "aws_iam_policy_document" "cluster_autoscaler_policy" {
 }
 
 resource "aws_iam_policy" "cluster_autoscaler" {
-  name   = "eks-${local.cluster_name}-cluster-autoscaler-role"
+  count  = var.enable_cluster_autoscaler ? 1 : 0
+  name   = "k8s-${var.cluster_name}-cluster-autoscaler"
   policy = data.aws_iam_policy_document.cluster_autoscaler_policy.json
 }
 
@@ -26,24 +27,26 @@ data "aws_iam_policy_document" "cluster_autoscaler_role" {
     actions = ["sts:AssumeRoleWithWebIdentity"]
     principals {
       type        = "Federated"
-      identifiers = [module.eks.oidc_provider_arn]
+      identifiers = [var.oidc_provider_arn]
     }
     condition {
       test     = "StringEquals"
-      variable = "${module.eks.oidc_provider}:sub"
+      variable = "${var.oidc_provider}:sub"
       values   = ["system:serviceaccount:cluster-autoscaler:cluster-autoscaler"]
     }
   }
 }
 
 resource "aws_iam_role" "cluster_autoscaler" {
-  name               = "eks-${local.cluster_name}-cluster-autoscaler-role"
+  count              = var.enable_cluster_autoscaler ? 1 : 0
+  name               = "k8s-${var.cluster_name}-cluster-autoscaler"
   assume_role_policy = data.aws_iam_policy_document.cluster_autoscaler_role.json
 }
 
 
 resource "aws_iam_role_policy_attachment" "cluster-autoscaler" {
-  role       = aws_iam_role.cluster_autoscaler.name
-  policy_arn = aws_iam_policy.cluster_autoscaler.arn
+  count      = var.enable_cluster_autoscaler ? 1 : 0
+  role       = aws_iam_role.cluster_autoscaler[0].name
+  policy_arn = aws_iam_policy.cluster_autoscaler[0].arn
 }
 
