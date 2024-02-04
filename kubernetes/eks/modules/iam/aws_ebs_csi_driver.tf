@@ -132,7 +132,7 @@ data "aws_iam_policy_document" "ebs_csi_driver_assume_policy" {
       identifiers = [var.oidc_provider_arn]
     }
     condition {
-      test     = "StringEquals"
+      test     = "StringLike"
       variable = "${var.oidc_provider}:sub"
       values   = ["system:serviceaccount:aws-ebs-csi-driver:ebs-*"]
     }
