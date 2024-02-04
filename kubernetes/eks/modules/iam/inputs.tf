@@ -19,3 +19,8 @@ variable "enable_aws_loadbalancer_controller" {
   type    = bool
   default = true
 }
+
+variable "enable_aws_ebs_csi_driver" {
+  type    = bool
+  default = true
+}

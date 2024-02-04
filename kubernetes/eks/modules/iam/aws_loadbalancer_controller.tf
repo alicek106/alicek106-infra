@@ -251,28 +251,25 @@ resource "aws_iam_policy" "aws_loadbalancer_controller" {
 EOF
 }
 
+data "aws_iam_policy_document" "aws_loadbalancer_controller_assume_policy" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = [var.oidc_provider_arn]
+    }
+    condition {
+      test     = "StringEquals"
+      variable = "${var.oidc_provider}:sub"
+      values   = ["system:serviceaccount:aws-loadbalancer-controller:aws-loadbalancer-controller*"]
+    }
+  }
+}
+
 resource "aws_iam_role" "aws_loadbalancer_controller" {
   count              = var.enable_aws_loadbalancer_controller ? 1 : 0
   name               = "k8s-${var.cluster_name}-aws-lb-controller"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "${var.oidc_provider}"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringLike": {
-          "${var.oidc_provider}:sub": "system:serviceaccount:kube-system:aws-loadbalancer-controller*"
-        }
-      }
-    }
-  ]
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.aws_loadbalancer_controller_assume_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "aws_loadbalancer_controller" {

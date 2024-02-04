@@ -93,3 +93,15 @@ variable "addon_aws_loadbalancer_controller" {
     chart_version = "1.6.2"
   }
 }
+
+variable "addon_aws_ebs_csi_driver" {
+  type = object({
+    enabled       = bool
+    chart_version = string
+  })
+
+  default = {
+    enabled       = true
+    chart_version = "2.21.0"
+  }
+}

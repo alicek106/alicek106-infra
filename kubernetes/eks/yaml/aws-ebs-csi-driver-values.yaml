@@ -1,0 +1,35 @@
+controller:
+  k8sTagClusterId: ${cluster_name}
+  region: ${cluster_region}
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "${service_account_role_arn}"
+
+storageClasses:
+- name: gp3
+  volumeBindingMode: WaitForFirstConsumer
+  reclaimPolicy: Delete
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+  parameters:
+    encrypted: "true"
+    type: "gp3"
+    csi.storage.k8s.io/fstype: "ext4"
+    iops: "3000"
+    throughput: "125"
+  allowVolumeExpansion: true
+- name: gp3-protected
+  volumeBindingMode: WaitForFirstConsumer
+  reclaimPolicy: Retain
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+  parameters:
+    encrypted: "true"
+    type: "gp3"
+    csi.storage.k8s.io/fstype: "ext4"
+    iops: "3000"
+    throughput: "125"
+  allowVolumeExpansion: true
+
+node:
+  tolerateAllTaints: true

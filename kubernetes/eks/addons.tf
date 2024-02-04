@@ -120,3 +120,25 @@ resource "helm_release" "aws_loadbalancer_controller" {
     module.cluster,
   ]
 }
+
+resource "helm_release" "aws_ebs_csi_driver" {
+  count            = var.addon_aws_ebs_csi_driver.enabled ? 1 : 0
+  name             = "aws-ebs-csi-driver"
+  namespace        = "aws-ebs-csi-driver"
+  create_namespace = true
+  repository       = "https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
+  chart            = "aws-ebs-csi-driver"
+  version          = var.addon_aws_ebs_csi_driver.chart_version
+
+  values = [
+    templatefile("${path.module}/yaml/aws-ebs-csi-driver-values.yaml", {
+      service_account_role_arn = "${local.iam_arn_prefix}-ebs-csi-driver"
+      cluster_name             = var.cluster_name,
+      cluster_region           = var.region,
+    })
+  ]
+
+  depends_on = [
+    module.cluster,
+  ]
+}

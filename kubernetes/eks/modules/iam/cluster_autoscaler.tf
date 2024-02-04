@@ -1,4 +1,3 @@
-## Cluster Autoscaler role
 data "aws_iam_policy_document" "cluster_autoscaler_policy" {
   statement {
     effect = "Allow"
