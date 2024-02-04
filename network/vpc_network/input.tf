@@ -17,3 +17,8 @@ variable "subnet_cidr_blocks_private" {
 variable "common_tags" {
   type = map(any)
 }
+
+variable "enable_nat_gateway" {
+  type    = bool
+  default = false
+}

@@ -6,4 +6,5 @@ module "vpc_network" {
   subnet_cidr_blocks_public  = local.current_subnet_cidr_blocks.public
   subnet_cidr_blocks_private = local.current_subnet_cidr_blocks.private
   common_tags                = local.common_tags
+  enable_nat_gateway         = true
 }
