@@ -261,7 +261,7 @@ data "aws_iam_policy_document" "aws_loadbalancer_controller_assume_policy" {
     condition {
       test     = "StringEquals"
       variable = "${var.oidc_provider}:sub"
-      values   = ["system:serviceaccount:aws-loadbalancer-controller:aws-loadbalancer-controller*"]
+      values   = ["system:serviceaccount:aws-loadbalancer-controller:aws-loadbalancer-controller"]
     }
   }
 }

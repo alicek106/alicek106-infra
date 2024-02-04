@@ -12,7 +12,7 @@ EOFTF
     }
 
     key_name   = var.cluster_name
-    subnet_ids = var.subnet_ids
+    subnet_ids = var.private_subnet_ids
     min_size   = 1
     max_size   = 5
 

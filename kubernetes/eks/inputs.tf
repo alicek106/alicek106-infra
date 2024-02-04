@@ -12,7 +12,11 @@ variable "region" {
   default = "ap-northeast-2"
 }
 
-variable "subnet_ids" {
+variable "private_subnet_ids" {
+  type = list(string)
+}
+
+variable "public_subnet_ids" {
   type = list(string)
 }
 

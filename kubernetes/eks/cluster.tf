@@ -19,7 +19,7 @@ module "cluster" {
   manage_aws_auth_configmap = true
   cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
-  subnet_ids = var.subnet_ids
+  subnet_ids = var.private_subnet_ids
   vpc_id     = var.vpc_id
 
   cluster_endpoint_private_access = true

@@ -1,6 +1,8 @@
 controller:
   service:
+    %{ if enable_nlb }
     annotations:
-      %{ if enable_nlb }
-      service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      %{ endif }
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+      service.beta.kubernetes.io/aws-load-balancer-subnets: "${subnet_ids}"
+    loadBalancerClass: service.k8s.aws/nlb
+    %{ endif }

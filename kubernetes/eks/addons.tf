@@ -91,6 +91,7 @@ resource "helm_release" "nginx_ingress_controller" {
   values = [
     templatefile("${path.module}/yaml/nginx-ingress-controller-values.yaml", {
       enable_nlb = var.addon_nginx_ingress_controller.enable_nlb
+      subnet_ids = join(",", var.public_subnet_ids)
     })
   ]
 
