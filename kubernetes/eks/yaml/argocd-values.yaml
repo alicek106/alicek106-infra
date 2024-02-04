@@ -1,0 +1,8 @@
+configs:
+  cm:
+    url: ${url}
+    admin.enabled: ${admin_enabled}
+    application.instanceLabelKey: "app.kubernetes.io/instance"
+    users.anonymous.enabled: "false"
+  params:
+    server.insecure: true

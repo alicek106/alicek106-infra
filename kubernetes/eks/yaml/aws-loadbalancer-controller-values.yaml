@@ -1,0 +1,11 @@
+clusterName: ${cluster_name}
+replicaCount: 1
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: "${service_account_role_arn}"
+  name: ${service_account}
+
+controllerConfig:
+  featureGates:
+    SubnetsClusterTagCheck: false

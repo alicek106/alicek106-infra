@@ -14,3 +14,8 @@ variable "enable_cluster_autoscaler" {
   type    = bool
   default = true
 }
+
+variable "enable_aws_loadbalancer_controller" {
+  type    = bool
+  default = true
+}
