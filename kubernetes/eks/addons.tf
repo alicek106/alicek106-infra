@@ -36,6 +36,7 @@ resource "helm_release" "cluster_autoscaler" {
 
   depends_on = [
     module.cluster,
+    helm_release.aws_loadbalancer_controller,
   ]
 }
 
@@ -57,6 +58,7 @@ resource "helm_release" "argocd" {
 
   depends_on = [
     module.cluster,
+    helm_release.aws_loadbalancer_controller,
   ]
 }
 
@@ -76,6 +78,7 @@ resource "helm_release" "argo_rollouts" {
 
   depends_on = [
     module.cluster,
+    helm_release.aws_loadbalancer_controller,
   ]
 }
 
@@ -97,6 +100,7 @@ resource "helm_release" "nginx_ingress_controller" {
 
   depends_on = [
     module.cluster,
+    helm_release.aws_loadbalancer_controller,
   ]
 }
 
@@ -141,5 +145,6 @@ resource "helm_release" "aws_ebs_csi_driver" {
 
   depends_on = [
     module.cluster,
+    helm_release.aws_loadbalancer_controller,
   ]
 }
