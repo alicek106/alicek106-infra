@@ -123,6 +123,7 @@ resource "helm_release" "aws_loadbalancer_controller" {
 
   depends_on = [
     module.cluster,
+    module.iam,
   ]
 }
 
@@ -146,5 +147,6 @@ resource "helm_release" "aws_ebs_csi_driver" {
   depends_on = [
     module.cluster,
     helm_release.aws_loadbalancer_controller,
+    module.iam,
   ]
 }
