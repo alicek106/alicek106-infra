@@ -1,0 +1,9 @@
+zmodule zsh-users/zsh-autosuggestions
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule jonmosco/kube-ps1
+
+zmodule romkatv/powerlevel10k
+
+# Auto expand
+zmodule simnalamburt/zsh-expand-all
+zmodule MenkeTechnologies/zsh-expand

@@ -1,0 +1,10 @@
+[Unit]
+Description=K3s Server
+After=network.target
+
+[Service]
+ExecStart=K3S_BINARY server --data-dir HOME_DIR/nix-data/k3s/
+Restart=always
+
+[Install]
+WantedBy=default.target
