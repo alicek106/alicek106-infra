@@ -5,7 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-alias vim=nvim
 export EDITOR=nvim
 
 # Increase Max history size
@@ -55,7 +54,7 @@ source $ZIM_INIT init -q
 source $ZIM_HOME/init.zsh
 
 # To customize prompt, run `p10k configure` or edit /home/alicek106/nix/.p10k.zsh.
-[[ ! -f /home/alicek106/nix/.p10k.zsh ]] || source /home/alicek106/nix/.p10k.zsh
+[[ ! -f /root/nix/.p10k.zsh ]] || source /root/nix/.p10k.zsh
 
 bindkey -e
 bindkey '^A' beginning-of-line
