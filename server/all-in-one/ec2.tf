@@ -33,6 +33,22 @@ data "aws_ami" "ubuntu" {
   }
 }
 
+resource "aws_ebs_volume" "gitea" {
+  availability_zone = aws_instance.wireguard.availability_zone
+  size              = 20
+  type              = "gp3"
+
+  tags = {
+    Name = "gitea-data"
+  }
+}
+
+resource "aws_volume_attachment" "gitea" {
+  device_name = "/dev/xvdf"
+  volume_id   = aws_ebs_volume.gitea.id
+  instance_id = aws_instance.wireguard.id
+}
+
 resource "aws_instance" "wireguard" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
@@ -49,6 +65,24 @@ export DEBIAN_FRONTEND=noninteractive
 apt update -y
 apt install -y unzip curl
 apt install -y wireguard iptables-persistent
+
+# Wait for EBS volume to be attached
+while [ ! -e /dev/xvdf ]; do
+  echo "Waiting for EBS volume..."
+  sleep 2
+done
+
+# Format and mount EBS volume for gitea
+if ! blkid /dev/xvdf; then
+  mkfs.ext4 /dev/xvdf
+fi
+
+mkdir -p /root/gitea
+mount /dev/xvdf /root/gitea
+
+# Add to fstab for persistent mount
+UUID=$(blkid -s UUID -o value /dev/xvdf)
+echo "UUID=$UUID /root/gitea ext4 defaults,nofail 0 2" >> /etc/fstab
 
 curl -s "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
 unzip -q /tmp/awscliv2.zip -d /tmp
@@ -129,7 +163,7 @@ mkdir -p /root/diary/data/attachments
 
 podman rm -f diary 2>/dev/null || true
 
-podman run -d \
+podman create \
   --name diary \
   --user root \
   --network "$PODMAN_NET_NAME" \
@@ -145,10 +179,8 @@ podman run -d \
   -e BACKUP_ENABLED="true" \
   -e S3_BUCKET_NAME="alicek106-diary-backup" \
   -e S3_BACKUP_PREFIX="backup/" \
-  --label "io.containers.autoupdate=image" \
   public.ecr.aws/o5v4y7w2/diary:latest
 
-mkdir -p /root/gitea
 podman run -d \
   --name gitea \
   --user root \
